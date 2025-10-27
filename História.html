@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Site</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>E-book: Rebeliões na América Portuguesa - 8° Ano</title>
+<style>
+  /* Reset and base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ffffff;
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 18px;
+  }
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    text-align: center;
+  }
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+  section {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  }
+  p {
+    max-width: 860px;
+    margin-bottom: 1.25rem;
+    color: #6b7280;
+  }
+  ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 12px;
+            position: relative;
+        }
+  .questions {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  }
+  .questions h2 {
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+  }
+  ol {
+    max-width: 860px;
+    padding-left: 1.5rem;
+  }
+  ol li {
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+  }
+  footer {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    margin-top: 4rem;
+    padding-bottom: 2rem;
+  }
+  @media (max-width: 600px) {
+    main {
+      padding: 3rem 1rem 4rem;
+    }
+    h1 {
+      font-size: 36px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rebeliões na América Portuguesa</h1>
+
+  <section>
+    <h2>Contexto Histórico</h2>
+    <p>Durante o período colonial, a América Portuguesa foi palco de diversos movimentos e rebeliões motivados por insatisfações sociais, econômicas e políticas. Essas rebeliões tiveram papel importante na história do Brasil, pois expressaram a resistência das populações coloniais contra a exploração e o controle impostos pela metrópole portuguesa.</p>
+  </section>
+
+  <section>
+    <h2>Principais Rebeliões</h2>
+    <ul>
+      <li><strong>Revolta de Beckman (1684):</strong> Ocorreu no Maranhão, liderada pelos irmãos Beckman contra o monopólio da Companhia de Comércio do Maranhão e as dificuldades enfrentadas pelos colonos.</li>
+      <li><strong>Guerra dos Emboabas (1707-1709):</strong> Conflito entre paulistas (bandeirantes) e os chamados "emboabas" (forasteiros) pelo controle das minas de ouro em Minas Gerais.</li>
+      <li><strong>Revolta de Felipe dos Santos (1720):</strong> Também em Minas Gerais, foi uma reação contra os altos impostos cobrados pela Coroa sobre a mineração.</li>
+      <li><strong>Inconfidência Mineira (1789):</strong> Movimento de caráter iluminista e separatista que buscava a independência do Brasil, influenciado pelas ideias de liberdade e democracia. Apesar de ter sido reprimida, marcou um importante passo para a emancipação.</li>
+      <li><strong>Conjuração Baiana (1798):</strong> Revolta popular que envolveu negros, indígenas e mestiços, com objetivos sociais de fim da escravidão e igualdade entre as classes.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Motivações das Rebeliões</h2>
+    <p>As principais causas que levaram às rebeliões na América Portuguesa foram:</p>
+    <ul>
+      <li><strong>Exploração econômica:</strong> Altos impostos sobre a produção de ouro e produtos agrícolas.</li>
+      <li><strong>Monopólio comercial:</strong> Controle da metrópole sobre o comércio colonial, limitando o crescimento dos colonos.</li>
+      <li><strong>Desigualdades sociais:</strong> A grande diferença entre senhores de terras, comerciantes e a maioria da população pobre e escravizada.</li>
+      <li><strong>Influência das ideias iluministas:</strong> Novos conceitos de liberdade, igualdade e direitos começaram a circular entre os intelectuais e algumas elites.</li>
+      <li><strong>Resistência contra o autoritarismo português:</strong> Insatisfação com a rigidez do sistema colonial e a falta de autonomia política.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Consequências</h2>
+    <p>Apesar da maioria das rebeliões ter sido reprimida imediatamente, elas foram fundamentais para:</p>
+    <ul>
+      <li>Fortalecer o sentimento de identidade e autonomia do Brasil.</li>
+      <li>Espalhar ideias de independência e justiça social.</li>
+      <li>Mostrar a insatisfação dos diferentes grupos sociais que compunham a colônia.</li>
+      <li>Influenciar movimentos futuros rumo à independência do Brasil, em 1822.</li>
+    </ul>
+  </section>
+
+  <section class="questions">
+    <h2>5 Perguntas para Fixar o Conteúdo</h2>
+    <ol>
+      <li>Quais foram as principais causas das rebeliões na América Portuguesa?</li>
+      <li>Como a Guerra dos Emboabas influenciou a história das minas de ouro em Minas Gerais?</li>
+      <li>Qual a importância da Inconfidência Mineira no processo de independência do Brasil?</li>
+      <li>Quem participaram e quais eram os objetivos da Conjuração Baiana?</li>
+      <li>De que forma as rebeliões ajudaram a fortalecer a identidade brasileira colonial?</li>
+    </ol>
+  </section>
+</main>
+<footer>
+  &copy; 2024 E-book de História - 8° Ano
+</footer>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-book: Independência dos EUA - História 8° Ano</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap');
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-accent: #000000;
+      --radius: 0.75rem;
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      max-width: 1200px;
+      margin: 4rem auto 5rem;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+    h1 {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      font-size: 48px;
+      margin: 0;
+      text-align: center;
+    }
+    h2 {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      font-size: 32px;
+      margin-bottom: 1rem;
+    }
+    section {
+      background: var(--color-bg);
+      padding: 2rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+    li {
+      margin-bottom: 0.75rem;
+    }
+    .questions {
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      background: var(--color-bg);
+      padding: 2rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+    }
+    .questions h2 {
+      color: var(--color-text-primary);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    ol {
+      padding-left: 1.5rem;
+      color: var(--color-text-primary);
+    }
+    ol li {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+    footer {
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 14px;
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 0 1rem;
+        margin: 3rem auto 4rem;
+      }
+      h1 {
+        font-size: 36px;
+      }
+      h2 {
+        font-size: 26px;
+      }
+      section,
+      .questions {
+        max-width: 100%;
+        padding: 1.5rem 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Independência dos Estados Unidos</h1>
+
+  <section>
+    <h2>Contexto Histórico</h2>
+    <p>No século XVIII, as Treze Colônias britânicas na América do Norte começaram a se ressentir do controle e dos impostos impostos pela Inglaterra. Os colonos estavam cansados de não terem representação no Parlamento, mas precisarem pagar impostos altos, o que ficou conhecido como “no taxation without representation” (“sem tributação sem representação”).</p>
+  </section>
+
+  <section>
+    <h2>Causas da Independência</h2>
+    <ul>
+      <li><strong>Impostos e Leis Injustas:</strong> A Inglaterra impôs impostos severos, como o Stamp Act e o Tea Act, cobrando sem a aprovação dos colonos.</li>
+      <li><strong>Restrições Comerciais:</strong> O monopólio do comércio beneficiava a Inglaterra, limitando o crescimento econômico das colônias.</li>
+      <li><strong>Influência das Ideias Iluministas:</strong> Conceitos de liberdade, direitos naturais e governo baseado em consentimento popular influencia o pensamento dos colonos.</li>
+      <li><strong>Eventos Marcantes:</strong> O Massacre de Boston e o Boston Tea Party aumentaram a tensão entre colonos e britânicos.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>A Guerra e a Declaração</h2>
+    <p>Em 1775, começou a Guerra da Independência, quando as colônias se uniram para lutar contra o domínio britânico.</p>
+    <p>Em 4 de julho de 1776, a Declaração da Independência foi assinada, principalmente redigida por Thomas Jefferson, declarando que as colônias seriam livres e independentes dos britânicos.</p>
+  </section>
+
+  <section>
+    <h2>Consequências</h2>
+    <ul>
+      <li><strong>Criação dos Estados Unidos:</strong> As colônias formaram um novo país, os Estados Unidos da América, com um governo democrático.</li>
+      <li><strong>Modelo para Outras Lutas:</strong> Inspirou outras nações e movimentos de independência, influenciados pelas ideias de liberdade e direitos humanos.</li>
+      <li><strong>Forte influência Iluminista:</strong> A Constituição dos EUA inclui princípios de soberania popular, separação de poderes e direitos individuais.</li>
+    </ul>
+  </section>
+
+  <section class="questions">
+    <h2>5 Perguntas para Fixar o Conteúdo</h2>
+    <ol>
+      <li>Quais foram as principais razões que motivaram as Treze Colônias a buscarem sua independência da Inglaterra?</li>
+      <li>Qual foi o significado da frase “no taxation without representation” e por que ela foi importante?</li>
+      <li>Quais eventos aumentaram a tensão entre os colonos e o governo britânico antes da guerra?</li>
+      <li>Quem foi responsável pela redação da Declaração da Independência dos EUA e o que ela declarou?</li>
+      <li>Como a independência dos Estados Unidos influenciou outros povos e movimentos ao redor do mundo?</li>
+    </ol>
+  </section>
+</main>
+<footer>
+  &copy; 2025 E-book de História - 8° Ano
+</footer>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-book: Independência da América Espanhola - História 8° Ano</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap');
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-accent: #000000;
+      --radius: 0.75rem;
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    main {
+      max-width: 1200px;
+      margin: 4rem auto 5rem;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+    h1 {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      font-size: 48px;
+      margin: 0;
+      text-align: center;
+    }
+    h2 {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      font-size: 32px;
+      margin-bottom: 1rem;
+    }
+    section {
+      background: var(--color-bg);
+      padding: 2rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+    li {
+      margin-bottom: 0.75rem;
+    }
+    .questions {
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+      background: var(--color-bg);
+      padding: 2rem 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+    }
+    .questions h2 {
+      color: var(--color-text-primary);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    ol {
+      padding-left: 1.5rem;
+      color: var(--color-text-primary);
+    }
+    ol li {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+    footer {
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 14px;
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 0 1rem;
+        margin: 3rem auto 4rem;
+      }
+      h1 {
+        font-size: 36px;
+      }
+      h2 {
+        font-size: 26px;
+      }
+      section,
+      .questions {
+        max-width: 100%;
+        padding: 1.5rem 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Independência da América Espanhola</h1>
+
+  <section>
+    <h2>Contexto Histórico</h2>
+    <p>No início do século XIX, as colônias espanholas da América Latina começaram a buscar sua independência, inspiradas por movimentos revolucionários nos Estados Unidos e na França, além das mudanças políticas na Europa, como a invasão napoleônica à Espanha.</p>
+  </section>
+
+  <section>
+    <h2>Causas da Independência</h2>
+    <ul>
+      <li><strong>Dominância Espanhola:</strong> Os colonos estavam insatisfeitos com o controle rígido, exploração econômica e a falta de autonomia política.</li>
+      <li><strong>Influência das Ideias Iluministas:</strong> Ideais de liberdade, igualdade e soberania popular influenciaram líderes e populações locais.</li>
+      <li><strong>Crise na Espanha:</strong> A invasão napoleônica enfraqueceu o controle espanhol, criando uma oportunidade para as colônias agirem.</li>
+      <li><strong>Desequilíbrio Social e Econômico:</strong> Desigualdades entre a elite europeia, descendentes de espanhóis e a grande massa de indígenas e mestiços.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Principais Líderes e Movimentos</h2>
+    <ul>
+      <li><strong>Simón Bolívar:</strong> Conhecido como o Libertador, liderou várias campanhas no norte da América do Sul para libertar Venezuela, Colômbia, Equador, Peru e Bolívia.</li>
+      <li><strong>José de San Martín:</strong> Era um general argentino que liderou as independências da Argentina, Chile e Peru.</li>
+      <li><strong>Miguel Hidalgo:</strong> Sacerdote mexicano que iniciou o movimento de independência do México com o famoso “Grito de Dolores”.</li>
+      <li><strong>Bernardo O'Higgins:</strong> Líder importante da independência do Chile.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Processo de Independência</h2>
+    <p>O processo foi longo e marcado por guerras de independência, convenções políticas e conflitos regionais. Diferentes regiões conquistaram sua liberdade entre 1810 e 1830, criando novos países independentes da Espanha.</p>
+    <p>Esses movimentos fortaleceram a identidade nacional e estabeleceram repúblicas baseadas em ideias de democracia e cidadania, apesar dos desafios sociais e políticos posteriores.</p>
+  </section>
+
+  <section>
+    <h2>Consequências</h2>
+    <ul>
+      <li>Fim do domínio espanhol sobre a maioria das colônias na América Latina.</li>
+      <li>Criação das repúblicas independentes com sistemas políticos próprios.</li>
+      <li>Manutenção de grandes desigualdades sociais e econômicas que influenciaram a história posterior.</li>
+      <li>Exemplos de luta e resistência que inspiraram outros movimentos na região.</li>
+    </ul>
+  </section>
+
+  <section class="questions">
+    <h2>5 Perguntas para Fixar o Conteúdo</h2>
+    <ol>
+      <li>Quais foram as principais causas que levaram à independência da América Espanhola?</li>
+      <li>De que forma a invasão napoleônica à Espanha impactou as colônias americanas?</li>
+      <li>Quem foi Simón Bolívar e qual foi sua importância na independência da América Latina?</li>
+      <li>Quais países foram libertados por José de San Martín?</li>
+      <li>Quais foram algumas consequências políticas e sociais após a independência da América Espanhola?</li>
+    </ol>
+  </section>
+</main>
+<footer>
+  &copy; 2025 E-book de História - 8° Ano
+</footer>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasil Imperial: Da Independência à Abdicação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9f9f9;
+            color: #000000; /* Alterado para preto */
+            line-height: 1.7;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 18px; /* Tamanho de fonte aumentado */
+        }
+        
+        header {
+            background: linear-gradient(to right, #002776, #009c3b);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.8rem; /* Aumentado */
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #ffffff; /* Mantido branco no cabeçalho */
+        }
+        
+        h2 {
+            font-family: 'Merriweather', serif;
+            color: #000000; /* Alterado para preto */
+            border-bottom: 2px solid #009c3b;
+            padding-bottom: 10px;
+            margin: 30px 0 20px;
+            font-size: 2rem; /* Aumentado */
+        }
+        
+        h3 {
+            font-family: 'Merriweather', serif;
+            color: #000000; /* Alterado para preto */
+            margin: 25px 0 15px;
+            font-size: 1.6rem; /* Aumentado */
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.4rem; /* Aumentado */
+            margin-bottom: 20px;
+            opacity: 0.9;
+            color: #ffffff; /* Mantido branco no cabeçalho */
+        }
+        
+        .timeline {
+            display: flex;
+            overflow-x: auto;
+            margin: 35px 0;
+            padding: 15px 0;
+            scrollbar-width: thin;
+        }
+        
+        .timeline-event {
+            min-width: 250px;
+            background: white;
+            border-left: 4px solid #002776;
+            padding: 18px;
+            margin-right: 15px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #002776;
+            font-size: 1.2rem; /* Aumentado */
+        }
+        
+        .timeline-event p {
+            color: #000000; /* Alterado para preto */
+            font-size: 1.1rem; /* Aumentado */
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        p {
+            margin-bottom: 18px;
+            text-align: justify;
+            font-size: 1.15rem; /* Aumentado */
+            color: #000000; /* Alterado para preto */
+        }
+        
+        .highlight {
+            background-color: #f0f8ff;
+            border-left: 4px solid #009c3b;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .highlight p {
+            color: #000000; /* Alterado para preto */
+            font-size: 1.15rem; /* Aumentado */
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .caption {
+            font-style: italic;
+            color: #000000; /* Alterado para preto */
+            margin-top: 10px;
+            font-size: 1.05rem; /* Aumentado */
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #000000; /* Alterado para preto */
+            border-top: 1px solid #ddd;
+            font-size: 1rem; /* Aumentado */
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                font-size: 16px; /* Ajuste para mobile */
+            }
+            
+            h1 {
+                font-size: 2.2rem; /* Ajuste para mobile */
+            }
+            
+            h2 {
+                font-size: 1.8rem; /* Ajuste para mobile */
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            p {
+                font-size: 1.05rem; /* Ajuste para mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Brasil Imperial: Da Independência à Abdicação</h1>
+        <p class="subtitle">A construção do Estado Nacional e suas contradições</p>
+    </header>
+    
+    <div class="container">
+        <h2>A Primeira Constituição Brasileira e a Assembleia Constituinte de 1823</h2>
+        <p>A proclamação da Independência do Brasil em 1822 foi um ato fundador, mas deixou uma tarefa colossal por completar: a organização jurídica e política da nova nação. Para isso, D. Pedro I convocou uma Assembleia Geral, Constituinte e Legislativa, em 1823. Composta majoritariamente por proprietários rurais, magistrados e clérigos, a assembleia tinha o objetivo de redigir a primeira Carta Magna do país.</p>
+        
+        <div class="highlight">
+            <p>Os trabalhos foram marcados por um profundo conflito entre dois projetos de nação: de um lado, a maioria da assembleia, de tendência liberal e desejosa de limitar os poderes do monarca, inspirada pelas ideias iluministas; de outro, o imperador D. Pedro I e seus aliados, que defendiam um poder executivo forte e centralizado, temendo que o liberalismo radical levasse à fragmentação do território, como ocorria nas ex-colônias espanholas.</p>
+        </div>
+        
+        <p>A tensão cresceu rapidamente, com a assembleia elaborando um projeto que submetia o imperador ao legislativo, incluindo a criação de um conselho de Estado eleito por ela e não nomeado por ele. Vendo seu poder ameaçado, D. Pedro I decidiu agir de forma drástica.</p>
+    </div>
+    
+    <div class="timeline">
+        <div class="timeline-event">
+            <p class="timeline-date">1822</p>
+            <p>Independência do Brasil</p>
+        </div>
+        <div class="timeline-event">
+            <p class="timeline-date">1823</p>
+            <p>Assembleia Constituinte convocada</p>
+        </div>
+        <div class="timeline-event">
+            <p class="timeline-date">Nov 1823</p>
+            <p>Noite da Agonia</p>
+        </div>
+        <div class="timeline-event">
+            <p class="timeline-date">1824</p>
+            <p>Constituição outorgada</p>
+        </div>
+        <div class="timeline-event">
+            <p class="timeline-date">1825-1828</p>
+            <p>Guerra da Cisplatina</p>
+        </div>
+        <div class="timeline-event">
+            <p class="timeline-date">1831</p>
+            <p>Abdicação de D. Pedro I</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Constituição de 1824</h2>
+        <p>Em novembro de 1823, num episódio conhecido como "Noite da Agonia", D. Pedro I ordenou que tropas do Exército dissolvessem a Assembleia Constituinte, prendendo e exilando alguns de seus principais líderes, como os irmãos Bonifácio. O imperador, então, assumiu a tarefa de outorgar (impor) uma Constituição ao país.</p>
+        
+        <p>Para dar uma aparência de legitimidade, ele nomeou um Conselho de Estado formado por pessoas de sua confiança para revisar o projeto original da assembleia. O resultado foi a Constituição Brasileira de 1824, outorgada em 25 de março daquele ano.</p>
+        
+        <div class="highlight">
+            <p>Seu traço mais marcante era a criação do Poder Moderador, concebido pelo pensamento de Benjamin Constant. Este poder, exercido exclusivamente pelo imperador, situava-se acima dos outros três (Executivo, Legislativo e Judiciário), permitindo-lhe dissolver a Câmara dos Deputados, nomear senadores a partir de listas tríplices, sancionar leis e vetar decisões judiciais.</p>
+        </div>
+        
+        <p>A Constituição também estabelecia o catolicismo como religião oficial do Estado, enquanto tolerava outros cultos, e implementava um voto censitário (baseado na renda), excluindo a grande maioria da população do processo eleitoral. Apesar de seu caráter autoritário, a Carta de 1824 foi a mais duradoura da história do Brasil, vigendo por 65 anos.</p>
+    </div>
+    
+    <div class="container">
+        <h2>A Crise do Primeiro Reinado</h2>
+        <p>O autoritarismo de D. Pedro I, simbolizado pela dissolução da Constituinte e pela outorga da Constituição, gerou profunda desconfiança e oposição entre as elites políticas brasileiras. Esta crise de legitimidade foi agravada por uma série de fatores internos e externos que marcaram o Primeiro Reinado (1822-1831).</p>
+        
+        <h3>Guerra Cisplatina</h3>
+        <p>Um dos principais fatores dessa crise foi a Guerra da Cisplatina (1825-1828). A Província Cisplatina (atual Uruguai), que havia sido anexada ao Brasil por D. João VI, revoltou-se com o apoio das Províncias Unidas do Rio da Prata (Argentina). O conflito foi longo, custoso e desastroso para o Brasil.</p>
+        
+        <p>O imenso gasto militar drenou os cofres públicos e resultou em pesadas baixas para o Exército brasileiro. A guerra terminou com a mediação britânica, levando à independência do Uruguai em 1828. A humilhante derrota militar manchou a imagem de D. Pedro I, que era associado ao comando das forças armadas, e ampliou o sentimento de que o imperador estava mais interessado em vaidades gloriosas do que no bem-estar da nação.</p>
+        
+        <h3>A Morte de D. João VI e a Disputa pelo Trono Português</h3>
+        <p>Em 1826, morreu o rei D. João VI de Portugal. Como seu filho mais velho, D. Pedro era o herdeiro legítimo do trono português. No entanto, a Constituição brasileira de 1824 proibia o imperador de assumir a coroa de outro país sem a permissão da Assembleia Geral.</p>
+        
+        <p>A solução encontrada por D. Pedro foi abdicar do trono português em favor de sua filha, Maria da Glória, então uma criança de sete anos. Ele nomeou seu irmão, D. Miguel, como regente, com a condição de que este se casasse com Maria da Glória e jurasse uma Constituição liberal. D. Miguel, porém, traiu o acordo: dissolveu as Cortes, apossou-se do trono e reinstaurou o absolutismo em Portugal.</p>
+        
+        <div class="highlight">
+            <p>Este episódio colocou D. Pedro I em uma situação delicadíssima: para muitos brasileiros, o imperador estava mais preocupado com os assuntos dinásticos de Portugal do que com os problemas do Brasil. A suspeita de que ele nutria o desejo de reunir os dois reinos sob sua coroa, anulando a independência, cresceu vertiginosamente, minando ainda mais sua base de apoio.</p>
+        </div>
+        
+        <h3>Assassinato de Líbero Badaró e Noite das Garrafadas</h3>
+        <p>O descontentamento popular e das elites encontrou voz na imprensa oposicionista. Um de seus mais ferrenhos críticos era o jornalista Giovanni Battista Líbero Badaró, que através de seu periódico, "O Observador Constitucional", atacava o autoritarismo do imperador.</p>
+        
+        <p>Em novembro de 1830, Badaró foi assassinado em circunstâncias misteriosas, mas amplamente atribuídas a partidários do governo. Sua morte chocou a opiniência pública e se transformou em um símbolo da luta pela liberdade de imprensa e contra a tirania, unindo ainda mais a oposição.</p>
+        
+        <p>A tensão transbordou para as ruas em março de 1831, durante a visita de um grupo de artistas portugueses favoráveis ao imperador. Brasileiros (chamados de "brasileiros" ou "patriotas") e portugueses (chamados de "pés-de-chumbo" ou "caramurus") se enfrentaram violentamente no Rio de Janeiro durante três noites. No auge dos conflitos, os portugueses, de dentro de suas janelas, atacaron os brasileiros com garrafas, que retaliaram atacando as casas e lojas de portugueses. Este episódio, conhecido como "Noite das Garrafadas", demonstrou que a situação estava completamente fora de controle e que o imperador havia perdido o apoio popular na capital.</p>
+    </div> 
+    <div class="container">
+        <h2>Abdicação de D. Pedro I</h2>
+        <p>Isolado política e popularmente, D. Pedro I tentou uma última cartada: nomeou um ministério composto exclusivamente por brasileiros, o "Ministério dos Brasileiros". A medida, porém, foi vista como insuficiente e tardia.</p>
+        
+        <p>Em busca de apoio, o imperador recorreu às tropas estrangeiras (majoritariamente portuguesas) do Exército, o que foi interpretado como uma preparação para um golpe. A reação foi imediata: a Câmara dos Deputados se recusou a negociar, e uma multidão se reuniu no Campo de Santana (atual Praça da República) exigindo a abdicação.</p>
+        
+        <div class="highlight">
+            <p>Cercado por todos os lados, sem apoio militar suficiente e temendo uma guerra civil, D. Pedro I viu que sua posição era insustentável. Na madrugada de 7 de abril de 1831, ele abdicou do trono brasileiro em favor de seu filho, Pedro de Alcântara, então com apenas cinco anos de idade. Horas depois, partiu para a Europa, encerrando o Primeiro Reinado e iniciando o período regencial.</p>
+    <div class="container">
+        <h2>O Barão de Mauá e as Primeiras Indústrias no Brasil</h2>
+        <p>Enquanto a cena política fervilhava, os primórdios de uma transformação econômica começavam a surgir, ainda que timidamente, no Brasil. A figura central desse movimento foi Irineu Evangelista de Sousa, o futuro Barão e depois Visconde de Mauá.</p>
+        
+        <p>Um empreendedor visionário, Mauá foi o grande pioneiro da industrialização no país. Após um período de estudos na Inglaterra durante a Regência, ele retornou ao Brasil impressionado com o avanço industrial britânico e determinou-se a modernizar a economia nacional.</p>
+        
+        <p>Fundou a Ponta da Areia, em Niterói, que se tornou o maior estaleiro da América Latina, produzindo navios a vapor para navegação fluvial e marítima. Investiu em setores diversificados: criou a primeira fundição de ferro e bronze, estabeleceu uma companhia de gás para iluminação pública do Rio de Janeiro, construiu uma ferrovia (a primeira do Brasil foi a Estrada de Ferro Mauá, em 1854) e investiu em telégrafo e bancos.</p>
+        
+        <div class="highlight">
+            <p>Mauá representava uma nova mentalidade capitalista e industrial em um país cuja economia ainda era profundamente arraigada no latifúndio escravista e agroexportador. Seus empreendimentos, no entanto, esbarraram na falta de apoio governamental, na concorrência predatória britânica e na estrutura econômica do Segundo Reinado, que priorizava o café, levando muitos de seus negócios à falência. Mesmo assim, seu legado como o pai da indústria brasileira é inquestionável.</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>A Produção do Imaginário Nacional Brasileiro</h2>
+        <p>Todo esse período turbulento, da Independência à Abdicação, foi crucial não apenas para a construção do Estado, mas também para a formação de um imaginário nacional – um conjunto de símbolos, mitos e narrativas que buscavam criar um sentimento de identidade e pertencimento entre a população de um território imenso e diverso.</p>
+        
+        <p>A própria figura de D. Pedro I, com seu gesto heroico do "Grito do Ipiranga", foi imediatamente mitificada para servir como um símbolo unificador da nova nação. A outorga da Constituição, mesmo autoritária, foi um marco de ordenamento jurídico próprio.</p>
+        
+        <div class="highlight">
+            <p>Artistas, intelectuais e jornalistas, muitos deles envolvidos nos conflitos políticos, começaram a produzir obras que refletiam e, ao mesmo tempo, moldavam a ideia de "brasilidade". A imprensa, com seus debates acalorados, criou uma esfera pública onde a nação era imaginada e discutida.</p>
+        </div>
+        
+        <p>Apesar das profundas divisões regionais e sociais, o período forjou as primeiras ferramentas simbólicas – o imperador, a Constituição, a bandeira, o hino, os heróis e os vilões – que seriam incessantemente trabalhadas ao longo do século XIX para tentar tecer a unidade de um povo brasileiro.</p>
+    </div>
+    
+    <footer>
+        <p>© 2025 - História do Brasil Imperial | Estudo sobre a formação do Estado Nacional Brasileiro</p>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasil Imperial: Da Independência à Abdicação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9f9f9;
+            color: #000000;
+            line-height: 1.7;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 18px;
+            overflow-x: hidden; /* Previne rolagem horizontal indesejada */
+        }
+        
+        header {
+            background: linear-gradient(to right, #002776, #009c3b);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-family: 'Merriweather', serif;
+            color: #000000;
+            border-bottom: 2px solid #009c3b;
+            padding-bottom: 10px;
+            margin: 30px 0 20px;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            font-family: 'Merriweather', serif;
+            color: #000000;
+            margin: 25px 0 15px;
+            font-size: 1.6rem;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            color: #ffffff;
+        }
+        
+        .timeline {
+            display: flex;
+            overflow-x: auto;
+            margin: 35px 0;
+            padding: 15px 0;
+            scrollbar-width: thin;
+            gap: 15px; /* Substitui margin-right dos itens */
+        }
+        
+        .timeline-event {
+            min-width: 250px;
+            background: white;
+            border-left: 4px solid #002776;
+            padding: 18px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-radius: 0 4px 4px 0;
+            flex-shrink: 0; /* Impede que os itens encolham */
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #002776;
+            font-size: 1.2rem;
+        }
+        
+        .timeline-event p {
+            color: #000000;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            overflow: hidden; /* Garante que o conteúdo não vaze */
+        }
+        
+        p {
+            margin-bottom: 18px;
+            text-align: justify;
+            font-size: 1.15rem;
+            color: #000000;
+        }
+        
+        .ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+       .li {
+            margin-bottom: 12px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .highlight {
+            background-color: #f0f8ff;
+            border-left: 4px solid #009c3b;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .highlight p {
+            color: #000000;
+            font-size: 1.15rem;
+        }
+        
+        .figure {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .figure img {
+            max-width: 100%;
+            height: auto; /* Mantém a proporção da imagem */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .caption {
+            font-style: italic;
+            color: #000000;
+            margin-top: 10px;
+            font-size: 1.05rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #000000;
+            border-top: 1px solid #ddd;
+            font-size: 1rem;
+        }
+        
+        /* Melhorias para responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            h3 {
+                font-size: 1.4rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            p {
+                font-size: 1.05rem;
+                text-align: left; /* Melhor legibilidade em mobile */
+            }
+            
+            .timeline-event {
+                min-width: 220px; /* Reduz um pouco para telas menores */
+            }
+            
+            header {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .timeline-event {
+                min-width: 200px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>

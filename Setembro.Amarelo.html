@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setembro Amarelo</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Site</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setembro Amarelo: Mais que uma Campanha, um Ato de Coragem Coletiva</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --yellow: #FFDF00;
+            --light-yellow: #FFF9C4;
+            --gold: #FFC107;
+            --dark-blue: #1565C0;
+            --light-blue: #E3F2FD;
+            --dark-gray: #424242;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #fff;
+            background-image: 
+                radial-gradient(circle at 5% 10%, rgba(255, 223, 0, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 95% 10%, rgba(255, 223, 0, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 90%, rgba(255, 223, 0, 0.05) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #0D47A1 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            border-bottom-left-radius: 30% 20%;
+            border-bottom-right-radius: 30% 20%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 223, 0, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 80% 20%, rgba(255, 223, 0, 0.2) 0%, transparent 25%);
+            z-index: 0;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--yellow);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            color: var(--light-gray);
+        }
+        
+        .ribbon {
+            background-color: var(--yellow);
+            color: var(--dark-blue);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .intro {
+            background: linear-gradient(to bottom, var(--white) 0%, var(--light-gray) 100%);
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        section {
+            padding: 3.5rem 0;
+        }
+        
+        h2 {
+            color: var(--dark-blue);
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--yellow);
+            display: inline-block;
+            position: relative;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 5px;
+            background-color: var(--gold);
+            border-radius: 10px;
+        }
+        
+        h3 {
+            color: var(--dark-blue);
+            margin: 1.8rem 0 1.2rem;
+            padding-left: 15px;
+            border-left: 4px solid var(--yellow);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+        
+        .highlight {
+            background: linear-gradient(to right, rgba(255, 223, 0, 0.1) 0%, rgba(255, 223, 0, 0.3) 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            font-style: italic;
+            border-left: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        
+        .stats {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #BBDEFB 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .stats::before {
+            content: "\f201";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 6rem;
+            opacity: 0.1;
+            color: var(--dark-blue);
+        }
+        
+        .myth-truth {
+            background: linear-gradient(135deg, var(--light-gray) 0%, #E0E0E0 100%);
+            padding: 2rem;
+            border-radius: 18px;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        
+        .myth-truth:hover {
+            transform: translateY(-5px);
+        }
+        
+        .myth {
+            color: #D32F2F;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .truth {
+            color: #388E3C;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .warning-signs, .help-tips {
+            background: linear-gradient(135deg, var(--light-yellow) 0%, #FFECB3 100%);
+            padding: 2.2rem;
+            border-radius: 20px;
+            margin: 2.2rem 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-left: 0;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 12px;
+            position: relative;
+        }
+        
+        ol li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+        }
+        
+        ol li::before {
+            content: counter(step-counter);
+            background-color: var(--yellow);
+            color: var(--dark-blue);
+            font-weight: bold;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            margin-left: -40px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .help-box {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #BBDEFB 100%);
+            padding: 3rem 2rem;
+            border-radius: 25px;
+            margin: 3rem 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .help-box::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+            transform: rotate(30deg);
+            z-index: 0;
+        }
+        
+        .help-box-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .help-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--dark-blue);
+            margin: 1.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: var(--yellow);
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .help-number:hover {
+            transform: scale(1.05);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #0D47A1 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top-left-radius: 30% 20%;
+            border-top-right-radius: 30% 20%;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--yellow) 0%, var(--gold) 100%);
+            color: var(--dark-blue);
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: all 0.4s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .floating-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--gold) 100%);
+            color: var(--dark-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-content, .container {
+                padding: 0 15px;
+            }
+            
+            .help-number {
+                font-size: 2.5rem;
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .floating-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.7rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#help" class="floating-icon">
+        <i class="fas fa-hand-holding-heart"></i>
+    </a>
+    
+    <header>
+        <div class="header-content">
+            <h1>Setembro Amarelo</h1>
+            <p class="subtitle">Mais que uma Campanha, um Ato de Coragem Coletiva</p>
+            <div class="ribbon">Mês de Prevenção ao Suicídio</div>
+        </div>
+    </header>
+    
+    <section class="intro">
+        <div class="container">
+            <h2>O Peso do Silêncio e a Cor da Esperança</h2>
+            <p>Em um mundo que celebra constantemente a felicidade, a produtividade e a força, falar sobre dor, desespero e vulnerabilidade torna-se um ato revolucionário. O silêncio que por décadas cercou o sofrimento mental permitiu que ele crescesse nas sombras, alimentado por vergonha, desinformação e medo. O resultado desse pacto de quietude é trágico e mensurável: milhares de vidas perdidas a cada ano, cada uma representando um grito interno que não foi ouvido a tempo.</p>
+            
+            <div class="highlight">
+                <p>O Setembro Amarelo surge não apenas para quebrar esse silêncio, mas para substituí-lo por uma onda de luz, diálogo e compaixão. É um convite coletivo para olharmos uns para os outros com verdadeira atenção e dizermos, com a cor que simboliza a vida e o alerta: "Você não está sozinho. Sua dor importa. E existe ajuda."</p>
+            </div>
+            
+            <p>Setembro chega e, com ele, o amarelo ganha um significado profundo e urgente. Mais do que uma cor, torna-se um símbolo de esperança, um alerta solene e um convite à conversa sobre um tema que, por muito tempo, foi envolto em silêncio e tabu: a saúde mental e a prevenção do suicídio.</p>
+            
+            <p>O Setembro Amarelo não é apenas uma campanha de conscientização; é um movimento global que busca iluminar os cantos escuros da alma humana, lembrar-nos que a dor invisível é real e reforçar a mensagem crucial de que o suicídio pode ser prevenido. E a ferramenta mais poderosa que temos para isso é a conversa.</p>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>As Origens: Uma História de Amor e Luta</h2>
+            <p>Tudo começou com uma história pessoal que se transformou em um legado global. Em 1994, Mike Emme, um jovem de 17 anos dos Estados Unidos, tirou a própria vida. Mike era conhecido por sua personalidade carinhosa e por seu carro amarelo restaurado. No seu funeral, seus amigos distribuíram cartões amarrados com fitas amarelas com uma mensagem simples: "Se você precisar, peça ajuda."</p>
+            
+            <p>O gesto se espalhou e a fita amarela foi adotada como símbolo. Em 2003, a Organização Mundial da Saúde (OMS) instituiu o dia 10 de setembro como o Dia Mundial de Prevenção do Suicídio. No Brasil, a campanha foi trazida em 2015 por uma iniciativa conjunta do Centro de Valorização da Vida (CVV), da Associação Brasileira de Psiquiatria (ABP) e do Conselho Federal de Medicina (CFM), que oficializaram o Setembro Amarelo em território nacional.</p>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Os Números que Não Podemos Ignorar</h2>
+            <p>As estatísticas são alarmantes e servem como um grito de alerta para a gravidade do problema. Segundo a OMS:</p>
+            
+            <div class="stats">
+                <ul>
+                    <li>Aproximadamente 800 mil pessoas morrem por suicídio anualmente no mundo. Isso equivale a uma morte a cada 40 segundos.</li>
+                    <li>É a segunda maior causa de morte entre jovens de 15 a 29 anos.</li>
+                    <li>No Brasil, são registrados cerca de 14 mil casos por ano, uma média de 38 pessoas por dia.</li>
+                    <li>Para cada suicídio consumado, há um número significativamente maior de tentativas anteriores.</li>
+                </ul>
+            </div>
+            
+            <p>Por trás de cada um desses números, há uma história. Um rosto, um nome, uma família, amigos e um sofrimento profundo que, muitas vezes, passou despercebido. Esses dados não são apenas métricas; são um apelo à ação.</p>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Desfazendo Mitos: O que Precisamos Saber</h2>
+            <p>Um dos maiores obstáculos na prevenção é a desinformação. É vital desconstruir os mitos que cercam o suicídio:</p>
+            
+            <div class="myth-truth">
+                <h3>Mito: "Quem fala não faz."</h3>
+                <p><span class="truth">Verdade:</span> A grande maioria das pessoas que tira a própria vida deu sinais verbais ou comportamentais claros de seu sofrimento. Falar sobre suicídio é, frequentemente, um pedido de ajuda desesperado.</p>
+            </div>
+            
+            <div class="myth-truth">
+                <h3>Mito: "Suicídio é uma escolha egoísta ou uma fraqueza de caráter."</h3>
+                <p><span class="truth">Verdade:</span> Suicídio não é uma escolha racional, mais sim o ápice de uma dor psicológica insuportável. A pessoa não quer morrer; ela quer acabar com a dor que está sentindo e, em seu estado de angústia extrema, não vê outra saída.</p>
+            </div>
+            
+            <div class="myth-truth">
+                <h3>Mito: "Perguntar sobre suicídio pode dar a ideia."</h3>
+                <p><span class="truth">Verdade:</span> Pelo contrário. Abordar o assunto de forma empática, direta e sem julgamento pode ser um enorme alívio para quem está sofrendo. Mostra que você está disposto a ouvir e a falar sobre o que mais lhe dói, abrindo uma porta para o acolhimento.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Sinais de Alerta: Aprender a Enxergar a Dor Invisível</h2>
+            <p>Muitas pessoas em risco emitem sinais. Estar atento a eles pode salvar uma vida. Fique alerta se alguém próximo:</p>
+            
+            <div class="warning-signs">
+                <ul>
+                    <li>Fala frequentemente sobre morte, suicídio, desesperança, ou sentimentos de ser um fardo.</li>
+                    <li>Apresenta mudanças drásticas de comportamento: isolamento social, perda de interesse em atividades que antes gostava, irritabilidade extrema.</li>
+                    <li>Demonstra despreocupação com a própria aparência ou bem-estar.</li>
+                    <li>Tem alterações no sono (insônia ou dorme demais) e no apetite.</li>
+                    <li>Busca meios para tentar suicídio ou se desfaz de pertences valiosos sem explicação.</li>
+                    <li>Se mostra extremamente ansiosa ou deprimida.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section id="help">
+        <div class="container">
+            <h2>Como Ajudar: A Jornada da Empatia</h2>
+            <p>Você não precisa ser um profissional de saúde mental para fazer a diferença. Sua ação mais importante é ser humano.</p>
+            
+            <div class="help-tips">
+                <ol>
+                    <li><strong>Ouça Sem Julgar:</strong> Ofereça um espaço seguro, sem críticas, pressa ou conselhos clichês. Às vezes, a pessoa só precisa desabafar e se sentir ouvida.</li>
+                    <li><strong>Pergunte Diretamente:</strong> "Você está pensando em suicídio?" Essa pergunta, feita com calma e cuidado, não é ofensiva. Ela demonstra preocupação genuína.</li>
+                    <li><strong>Incentive e Facilite a Busca por Ajuda Profissional:</strong> A pessoa pode não ter forças para procurar ajuda sozinha. Ofereça-se para acompanhá-la a um psicólogo, psiquiatra ou a um posto de saúde.</li>
+                    <li><strong>Mantenha Contato:</strong> O acompanhamento é crucial. Ligue, visite, mande mensagens. Mostre que você se importa e que ela não está sozinha.</li>
+                    <li><strong>Não Mantenha em Segredo:</strong> Se alguém confidenciar pensamentos suicidas, não prometa segredo. A segurança da pessoa vem em primeiro lugar. Busque ajuda de profissionais ou de familiares.</li>
+                </ol>
+            </div>
+            
+            <div class="help-box">
+                <div class="help-box-content">
+                    <h2>Onde Buscar Ajuda:</h2>
+                    <p>CVV - Centro de Valorização da Vida: Ligações gratuitas para</p>
+                    <div class="help-number">188</div>
+                    <p>24 horas por dia, todos os dias. Também é possível conversar por chat, e-mail ou pessoalmente. O serviço é sigiloso.</p>
+                    <a href="https://www.cvv.org.br" class="btn">Visite o site do CVV</a>
+                </div>
+            </div>
+            
+            <p>Outros recursos:</p>
+            <ul>
+                <li>CAPS - Centros de Atenção Psicossocial: Rede do SUS especializada em saúde mental.</li>
+                <li>Unidades Básicas de Saúde (Postos de Saúde): A porta de entrada para o sistema público.</li>
+                <li>Profissionais de saúde mental: Psicólogos e psiquiatras.</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Vamos Falar Sobre Isso: O Diálogo que Salva</h2>
+            <p>"Vamos falar sobre isso" é muito mais do que um slogan. É a espinha dorsal de toda a campanha. Mas o que significa, na prática, "falar sobre isso"?</p>
+            
+            <p>Falar sobre isso é criar um espaço seguro, sem julgamentos, onde as emoções possam ser expressas livremente. É trocar o "não seja dramático" por "me conte mais sobre o que você está sentindo". É substituir o "mas você tem uma vida tão boa" por "deve ser muito difícil estar passando por isso".</p>
+            
+            <p>Falar sobre isso é entender que não precisamos ter todas as respostas. O papel de quem ouve não é resolver o problema do outro, mas validar seus sentimentos e, juntos, buscar a ajuda profissional qualificada. É ser a ponte, e não o engenheiro.</p>
+            
+            <p>Falar sobre isso é também olhar para dentro. É ter a coragem de reconhecer quando não estamos bem e permitir-nos ser vulneráveis. É praticar a autocompaixão e entender que pedir ajuda não é um sinal de fraqueza, mas um profundo ato de coragem e autocuidado.</p>
+            
+            <p>Falar sobre isso é uma responsabilidade que se estende a todas as esferas da sociedade:</p>
+            
+            <ul>
+                <li><strong>Nas famílias:</strong> Criar um ambiente onde crianças e adolescentes se sintam confortáveis para expressar suas angústias, sem medo de repreensão.</li>
+                <li><strong>Nas escolas:</strong> Implementar programas de educação emocional que ensinem os jovens a identificar e gerenciar suas emoções desde cedo.</li>
+                <li><strong>Nos locais de trabalho:</strong> Promover uma cultura de saúde mental, onde o assédio não seja tolerado e o burnout não seja glamourizado.</li>
+                <li><strong>Na mídia:</strong> Comunicar sobre suicídio com responsabilidade, evitando detalhes methods e sensacionalismo, e sempre destacando histórias de recuperação e canais de ajuda.</li>
+            </ul>
+            
+            <div class="highlight">
+                <p>O diálogo é a antítese do desespero solitário. Cada conversa é um fio de luz que tece uma rede de apoio.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>O Lado de Quem Fica: A Importância do Apoio Pós-Vento</h2>
+            <p>Falar sobre prevenção também é falar sobre os sobreviventes enlutados pelo suicídio. São os familiares, amigos e colegas que ficam, carregando um fardo complexo de luto, culpa, raiva e "e se...".</p>
+            
+            <p>Apoiar quem ficou é uma extensão crucial do "Vamos falar sobre isso". É necessário:</p>
+            
+            <ul>
+                <li><strong>Validar sua dor:</strong> O luto por suicídio é único. Frases como "foi escolha dele" são invalidantes. O acolhimento deve ser silencioso, paciente e presente.</li>
+                <li><strong>Encaminhar para grupos de apoio:</strong> Existem grupos específicos onde eles podem compartilhar suas experiências com quem verdadeiramente entende.</li>
+                <li><strong>Combater o estigma que eles carregam:</strong> Muitos enlutados enfrentam o julgamento social. A sociedade precisa aprender a abraçá-los sem julgamento.</li>
+            </ul>
+            
+            <p>Cuidar de quem ficou é uma forma de quebrar ciclos de dor e prevenir que o trauma se perpetue.</p>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Por Um Setembro Amarelo o Ano Inteiro: Ações Práticas Para Além do Mês</h2>
+            <p>A cor amarela não pode desbotar no calendário. A conscientização deve be perene. Como podemos fazer isso?</p>
+            
+            <ul>
+                <li><strong>Eduque-se:</strong> Leia sobre saúde mental. A desinformação é um dos maiores aliados do estigma.</li>
+                <li><strong>Seja Proativo:</strong> Não espere que alguém chegue até você quebrando. Mande uma mensagem. Convide para um café. Pequenos gestos de conexão podem ser um farol.</li>
+                <li><strong>Cobre Ações:</strong> Use sua voz para cobrar de gestores públicos políticas de saúde mental robustas.</li>
+                <li><strong>Cuide de Você:</strong> A prevenção começa em casa. Pratique o autocuidado. Buscar terapia é um investimento em sua qualidade de vida.</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section>
+        <div class="container">
+            <h2>Conclusão: Uma Cor que Ilumina o Caminho</h2>
+            <p>O Setembro Amarelo é um farol. Ele não apaga a escuridão da dor psíquica, mas ilumina o caminho para que ninguém precise atravessá-la sozinho. Ele nos lembra que a esperança é real, o acolhimento é possível e a recuperação é alcançável.</p>
+            
+            <p>Cada fita amarela, cada postagem, cada conversa é um compromisso. Um compromisso de olhar para o outro com mais humanidade. Um compromisso de substituir o julgamento pela curiosidade, a pressa pela pausa, e o silêncio pela pergunta que pode salvar uma vida.</p>
+            
+            <div class="highlight">
+                <p>Que este Setembro Amarelo não seja apenas um mês, mas um ponto de virada. Que a cor amarela nos lembre diariamente de que a vida, com todas as suas dificuldades, vale a pena ser vivida.</p>
+            </div>
+            
+            <p>A conversa não pode parar. A esperança não pode cessar. A ajuda existe.</p>
+            
+            <div class="help-box">
+                <div class="help-box-content">
+                    <div class="help-number">Ligue 188</div>
+                    <p>Você não está sozinho.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>Setembro Amarelo - Mais que uma Campanha, um Ato de Coragem Coletiva</p>
+            <p>Se precisar de ajuda, não hesite em buscar: CVV - 188</p>
+        </div>
+    </footer>
+
+    <script>
+        // Adiciona ano atual no footer
+        document.addEventListener('DOMContentLoaded', function() {
+            const year = new Date().getFullYear();
+            const footer = document.querySelector('footer');
+            const paragraph = document.createElement('p');
+            paragraph.style.marginTop = '1rem';
+            paragraph.style.opacity = '0.8';
+            footer.appendChild(paragraph);
+        });
+    </script>
+</body>
+</html>

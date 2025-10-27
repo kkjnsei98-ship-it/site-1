@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educação Física</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Site</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escuta Ativa - Colégio Estadual Ana Nestre de Melo</title>
+    <style>
+        :root {
+            --primary: #006341;
+            --secondary: #FFD700;
+            --accent: #E63946;
+            --light: #F1FAEE;
+            --dark: #1D3557;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .intro {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .professor {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .professor-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: var(--dark);
+            font-size: 2.5rem;
+            overflow: hidden;
+        }
+        
+        .professor-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .professor-info {
+            text-align: left;
+        }
+        
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .activity-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .activity-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-icon {
+            font-size: 1.5rem;
+        }
+        
+        .card-content {
+            margin-top: 1rem;
+        }
+        
+        .testimonials {
+            margin: 3rem 0;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            font-size: 5rem;
+            color: rgba(0, 99, 65, 0.1);
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            line-height: 1;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 1rem;
+            text-align: right;
+        }
+        
+        .sports-dream {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .sports-dream h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sport-visualization {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .sport-card {
+            width: 280px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .sport-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background-color: #C21321;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .professor {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Escuta Ativa nas Aulas de Educação Física</h1>
+            <p class="subtitle">Colégio Estadual Ana Nestre de Melo</p>
+            <p>8º ano do Ensino Fundamental à 3ª série do Ensino Médio</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="intro">
+            <h2>Momento de Diálogo e Construção Coletiva</h2>
+            <p>Na primeira semana de aula, a professora Natália da Silva Sodeiro Maganha realizou uma atividade de "Escuta" com os estudantes, criando um espaço seguro para que eles expressassem suas opiniões, expectativas e sugestões para as aulas de Educação Física.</p>
+            
+            <div class="professor">
+                <div class="professor-image">
+                    <img src="https://ik.imagekit.io/xrkqrpqhh/Imagem%20do%20WhatsApp%20de%202025-10-25%20%C3%A0(s)%2023.03.08_b071e15c.jpg?updatedAt=1761444297887" alt="Professora Natália">
+                </div>
+                <div class="professor-info">
+                    <h3>Prof. Natália da Silva Sodeiro Maganha</h3>
+                    <p>Educação Física</p>
+                </div>
+            </div>
+            
+            <p>Este momento foi essencial para entender as necessidades dos alunos e trabalhar juntos para tornar as aulas mais significativas e inclusivas.</p>
+        </section>
+        
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Tópicos Abordados pelos Estudantes</h2>
+            
+            <div class="activity-grid">
+                <div class="activity-card">
+                    <h3><span class="card-icon">🏫</span> Espaço Físico</h3>
+                    <div class="card-content">
+                        <p>Os estudantes compartilharam suas percepções sobre as condições da quadra, pátio e outros espaços utilizados para as aulas, apontando melhorias necessárias para a prática segura de atividades físicas.</p>
+                    </div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3><span class="card-icon">🧹</span> Limpeza</h3>
+                    <div class="card-content">
+                        <p>A manutenção e higiene dos espaços esportivos foram temas frequentes, com sugestões para manter o ambiente sempre agradável e adequado para as práticas corporais.</p>
+                    </div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3><span class="card-icon">🏐</span> Materiais Esportivos</h3>
+                    <div class="card-content">
+                        <p>A disponibilidade, qualidade e diversidade dos materiais foram discutidas, com propostas para ampliar o acervo e melhorar o acesso aos equipamentos durante as aulas.</p>
+                    </div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3><span class="card-icon">🤝</span> Interclasse</h3>
+                    <div class="card-content">
+                        <p>Os alunos expressaram grande interesse em aumentar a frequência e diversidade dos jogos interclasse, sugerindo novas modalidades e formatos para tornar os eventos mais inclusivos e participativos.</p>
+                    </div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3><span class="card-icon">📚</span> Aulas Teóricas</h3>
+                    <div class="card-content">
+                        <p>Foram levantadas expectativas sobre os conteúdos teóricos, com pedidos para abordar temas como saúde, nutrição, primeiros socorros e história dos esportes de forma dinâmica e contextualizada.</p>
+                    </div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3><span class="card-icon">⚽</span> Aulas Práticas</h3>
+                    <div class="card-content">
+                        <p>Os estudantes compartilharam suas preferências por modalidades esportivas e sugeriram novas práticas corporais, demonstrando interesse em experimentar diferentes vivências esportivas e culturais.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="testimonials">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Voz dos Estudantes</h2>
+            
+            <div class="testimonial-card">
+                <p>"Gostaria que tivéssemos mais aulas de alongamento e exercícios que pudéssemos fazer em casa também. Acho importante cuidar da saúde mesmo fora da escola."</p>
+                <p class="testimonial-author">- Aluno do 9º ano</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <p>"Seria legal termos mais opções de esportes, não só futebol e vôlei. Queria experimentar esportes menos comuns como badminton ou rugby."</p>
+                <p class="testimonial-author">- Aluna do 1º ano do Ensino Médio</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <p>"Precisamos de mais materiais em bom estado. Às vezes queremos jogar basquete mas não temos bolas adequadas ou a tabela está quebrada."</p>
+                <p class="testimonial-author">- Aluno do 8º ano</p>
+            </div>
+        </section>
+        
+        <section class="sports-dream">
+            <h2>O Sonho do Esporte na Nossa Escola</h2>
+            <p>Os estudantes visualizam um ambiente esportivo completo, com espaços adequados, materiais de qualidade e diversidade de atividades.</p>
+            
+            <div class="sport-visualization">
+                <div class="sport-card">
+                    <div class="sport-icon">🏀</div>
+                    <h3>Quadra Reformada</h3>
+                    <p>Com piso adequado, tabelas de basquete novas e demarcações visíveis.</p>
+                </div>
+                
+                <div class="sport-card">
+                    <div class="sport-icon">🎽</div>
+                    <h3>Materiais Diversos</h3>
+                    <p>Bolas, redes, cones e equipamentos para diversas modalidades esportivas.</p>
+                </div>
+                
+                <div class="sport-card">
+                    <div class="sport-icon">🤸</div>
+                    <h3>Atividades Inclusivas</h3>
+                    <p>Práticas que atendam a todos os estudantes, independente de habilidades.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Colégio Estadual Ana Nestre de Melo</p>
+        <p>Educação Física - Professora Natália da Silva Sodeiro Maganha</p>
+        <p>© 2025 - Todos os direitos reservados</p>
+    </footer>
+</body>
+</html>

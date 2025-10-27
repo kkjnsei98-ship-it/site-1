@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informática</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Site</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Formulário de Informática Básica - 8º Ano</title>
+<style>
+  :root {
+    --primary-color: #4a90e2;
+    --secondary-color: #50e3c2;
+    --background-color: #f5f7fa;
+    --text-color: #333;
+    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    background: var(--background-color);
+    font-family: var(--font-family);
+    color: var(--text-color);
+  }
+
+  h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 0.25em;
+  }
+
+  p.instructions {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  form {
+    max-width: 700px;
+    background: white;
+    padding: 2rem;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(74, 144, 226, 0.2);
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .question {
+    margin-bottom: 1rem;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+  }
+
+  input[type="text"]:focus,
+  textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+
+  .options {
+    margin-top: 0.3rem;
+  }
+
+  .options label {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+
+  button {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background: var(--secondary-color);
+  }
+
+  .thankyou-message {
+    display: none;
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    font-weight: 700;
+  }
+
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+    form {
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>Formulário de Informática Básica</h1>
+  <p class="instructions">8º Ano - Ensino Fundamental</p>
+  <form id="quizForm">
+    <div class="question">
+      <label for="q1">1. O que é hardware?</label>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a" required> a) Programas e softwares</label>
+        <label><input type="radio" name="q1" value="b"> b) Componentes físicos do computador</label>
+        <label><input type="radio" name="q1" value="c"> c) Dados armazenados</label>
+        <label><input type="radio" name="q1" value="d"> d) Linguagem de programação</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label for="q2">2. Qual destes é um sistema operacional?</label>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a" required> a) Microsoft Word</label>
+        <label><input type="radio" name="q2" value="b"> b) Windows 10</label>
+        <label><input type="radio" name="q2" value="c"> c) Google Chrome</label>
+        <label><input type="radio" name="q2" value="d"> d) Photoshop</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label for="q3">3. O que significa digitar?</label>
+      <textarea name="q3" id="q3" rows="3" placeholder="Escreva sua resposta aqui..." required></textarea>
+    </div>
+
+    <div class="question">
+      <label for="q4">4. Qual função tem o teclado e o mouse no computador?</label>
+      <textarea name="q4" id="q4" rows="3" placeholder="Escreva sua resposta aqui..." required></textarea>
+    </div>
+
+    <div class="question">
+      <label for="q5">5. Quais destes são exemplos de software?</label>
+      <div class="options">
+        <label><input type="checkbox" name="q5" value="a" required> a) Windows</label>
+        <label><input type="checkbox" name="q5" value="b"> b) Teclado</label>
+        <label><input type="checkbox" name="q5" value="c"> c) Microsoft Excel</label>
+        <label><input type="checkbox" name="q5" value="d"> d) Impressora</label>
+      </div>
+    </div>
+
+    <button type="submit">Enviar Respostas</button>
+  </form>
+  <p class="thankyou-message" id="thankyouMessage">Obrigado por enviar suas respostas!</p>
+
+  <script>
+    document.getElementById('quizForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const form = event.target;
+
+      // Simple validation check for checkbox (at least one selected)
+      const checkboxes = form.querySelectorAll('input[name="q5"]:checked');
+      if (checkboxes.length === 0) {
+        alert("Por favor, selecione pelo menos uma resposta da questão 5.");
+        return;
+      }
+      
+      form.style.display = 'none';
+      document.getElementById('thankyouMessage').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

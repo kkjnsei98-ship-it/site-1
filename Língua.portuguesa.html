@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Língua portuguesa</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Site</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gêneros Textuais e Cultura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2575fc;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        
+        .charge {
+            border-left: 4px solid #ff5252;
+        }
+        
+        .cartum {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .example {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .keyword {
+            background-color: #fff8e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #e65100;
+        }
+        
+        .music-card {
+            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        .grammar-card {
+            background: linear-gradient(to right, #c9ffbf 0%, #ffafbd 100%);
+        }
+        
+        .culture-card {
+            background: linear-gradient(to right, #d4e4f5 0%, #e9f2fc 100%);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gêneros Textuais e Cultura</h1>
+        <p>Uma análise de diferentes formas de expressão e comunicação</p>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Gênero Textual: Charge e Cartum</h2>
+            <p>Os gêneros textuais <span class="keyword">charge</span> e <span class="keyword">cartum</span> são formas de arte que utilizam o humor e a crítica, predominantemente por meio de imagens, mas possuem propósitos e características distintas.</p>
+            
+            <div class="comparison">
+                <div class="comparison-item charge">
+                    <h3>Charge</h3>
+                    <p>É um cartoon (desenho humorístico) de caráter <strong>jornalístico</strong> e <strong>político</strong>. Sua principal característica é a <strong>atualidade</strong>, pois critica um fato, personagem ou evento específico que está em evidência no momento da publicação.</p>
+                    <div class="example">
+                        Exemplo: Uma charge de um político famoso vestido como emperador romano, cercado por notas de dinheiro, criticando casos de corrupção.
+                    </div>
+                </div>
+                
+                <div class="comparison-item cartum">
+                    <h3>Cartum (ou Cartoon)</h3>
+                    <p>Tem um caráter mais <strong>universal</strong> e <strong>atemporal</strong>. Ele aborda situações do cotidiano, comportamentos humanos e ironias da vida em geral, sem estar necessariamente vinculado a um evento recente.</p>
+                    <div class="example">
+                        Exemplo: Um desenho de um homem tentando espantar uma mosca com um jornal, se contorcendo de forma engraçada pela sala toda.
+                    </div>
+                </div>
+            </div>
+            
+            <p><strong>Diferença Principal:</strong> Enquanto a <strong>charge</strong> é uma crítica pontual e temporal, o <strong>cartum</strong> é uma crítica ou observação social atemporal.</p>
+        </div>
+        
+        <div class="card">
+            <h2>Gênero Textual: Debate Regrado e Interpretação Textual</h2>
+            <p>O <span class="keyword">debate regrado</span> é um gênero oral formal no qual participantes defendem opiniões contrárias sobre um tema polêmico, seguindo um conjunto pré-estabelecido de regras.</p>
+            
+            <p>A <span class="keyword">interpretação textual</span> é uma competência fundamental para a participação em um debate regrado. Significa extrair meaning de um texto, indo além da superfície, identificando:</p>
+            
+            <ul>
+                <li><strong>Ideia principal:</strong> A tese central do autor.</li>
+                <li><strong>Ideias secundárias:</strong> Argumentos que sustentam a tese.</li>
+                <li><strong>Inferências:</strong> conclusões que não estão explícitas, mas são sugeridas pelo texto.</li>
+                <li><strong>Contexto:</strong> A época, a intenção do autor e o público-alvo.</li>
+            </ul>
+            
+            <p>Um debatedor eficaz precisa dominar a interpretação textual para compreender profundamente os artigos, dados e argumentos que utilizará, assim como para identificar falhas nos argumentos da oposição.</p>
+        </div>
+        
+        <div class="card music-card">
+            <h2>Gênero Musical: "Trem Bala" (Ana Vilela e Gaby Amarantos)</h2>
+            <p>A canção <span class="keyword">"Trem Bala"</span>, originalmente composta e interpretada por <strong>Ana Vilela</strong>, é um exemplo potente de música que se tornou um fenômeno cultural por sua mensagem profundamente emotiva e filosófica.</p>
+            
+            <p>A versão com <strong>Gaby Amarantos</strong> trouxe uma nova roupagem e ainda mais visibilidade à música. Gaby, artista paraense conhecida por sua energia contagiosa e pelo estilo "tecnobrega", apresentou uma interpretação surpreendentemente sensível e contida, mostrando sua versatilidade artística.</p>
+            
+            <p>A junção das duas vozes e estilos tão distintos (a MPB introspectiva de Ana e o carisma regional de Gaby) criou uma fusão que celebra a diversidade da música brasileira e universaliza a mensagem central da canção: o amor pela vida.</p>
+        </div>
+        
+        <div class="card grammar-card">
+            <h2>Ex-Mai Love e Conjugação Verbal</h2>
+            <p>A figura pública <strong>Maiara</strong> (da dupla com Maraisa), que já foi conhecida pelo apelido <span class="keyword">"ex-Mai Love"</span>, protagonizou um evento que se tornou um exemplo prático e moderno de <strong>conjugação verbal</strong>.</p>
+            
+            <p>Ela foi criticada nas redes sociais por supostamente errar a conjugação do verbo "adequar" no pretérito perfeito. Ao invés de dizer "adequei", ela disse <span class="keyword">"adequasse"</span>, que na verdade é a forma do pretérito imperfeito do subjuntivo ("se eu adequasse") ou do presente do subjuntivo ("que eu adequasse").</p>
+            
+            <p>Esse episódio viralizou e gerou amplo debate sobre norma culta vs. linguagem coloquial, variação linguística e cancelamento cultural.</p>
+        </div>
+        
+        <div class="card">
+            <h2>"Girassol" (Pricillo Alcantara e Whinderson Nunes)</h2>
+            <p><span class="keyword">"Girassol"</span> é uma música de autoria de <strong>Pricillo Alcantara</strong> e popularizada por <strong>Whinderson Nunes</strong>, que na época era mais conhecido como comediante e digital influencer.</p>
+            
+            <p>A letra usa o <strong>girassol</strong> como uma metáfora central para representar uma pessoa que é fonte de luz, alegria e orientação na vida do eu lírico. Assim como a flor que se vira para seguir o sol, a persona da música orienta sua vida e encontra calor e direção no ser amado.</p>
+        </div>
+        
+        <div class="card">
+            <h2>Pronomes Pessoais e Pronomes Interrogativos</h2>
+            
+            <h3>Pronomes Pessoais:</h3>
+            <p>Indicam as pessoas do discurso (quem fala, com quem se fala e de quem se fala). Eles podem ser:</p>
+            <ul>
+                <li><strong>Retos:</strong> Eu, tu, ele/ela, nós, vós, eles/elas. (atuam como sujeito)</li>
+                <li><strong>Oblíquos:</strong> me, te, o/a, nos, vos, os/as (atuam como complemento)</li>
+            </ul>
+            
+            <h3>Pronomes Interrogativos:</h3>
+            <p>São usados para formular perguntas, diretas ou indiretas:</p>
+            <ul>
+                <li><strong>Quem?</strong> (pergunta sobre pessoa)</li>
+                <li><strong>O que? / Que?</strong> (pergunta sobre coisa)</li>
+                <li><strong>Qual? / Quais?</strong> (pergunta sobre identidade ou qualidade)</li>
+                <li><strong>Onde? / Aonde?</strong> (pergunta sobre lugar)</li>
+                <li><strong>Quando?</strong> (pergunta sobre tempo)</li>
+                <li><strong>Como?</strong> (pergunta sobre modo ou estado)</li>
+                <li><strong>Por quê?</strong> (pergunta sobre motivo ou causa)</li>
+            </ul>
+            
+            <p>A principal diferença é a função: os pessoais <strong>substituem</strong> nomes, enquanto os interrogativos <strong>introduzem perguntas</strong>.</p>
+        </div>
+        
+        <div class="card culture-card">
+            <h2>Morango do Amor</h2>
+            <p>O <span class="keyword">"Morango do Amor"</span> não é um gênero textual ou musical, mas sim um <strong>fenômeno cultural e afetivo</strong> muito comum em cidades turísticas, praias e praças do Brasil.</p>
+            
+            <p>Trata-se de um morango geralmente fresco, mergulhado em chocolate ao leite, branco ou escuro, e muitas vezes decorado com confeitos ou granulado.</p>
+            
+            <p>Seu nome deriva do seu contexto de consumo: frequentemente vendido por vendedores ambulantes, é um item popular entre <strong>casais de namorados</strong> e pessoas em momentos românticos. Tornou-se um símbolo de afeto, um "presente" simples mas carregado de intenção afetiva.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Texto informativo sobre gêneros textuais e elementos da cultura brasileira</p>
+    </footer>
+</body>
+</html>

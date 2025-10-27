@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Fake News</title>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Arte</title>
+    <!-- Teste temporário -->
+    <link rel="icon" href="https://i.ibb.co/zTddQGzT/o.png" type="image/x-icon">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 200vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu Hambúrguer fixo no topo */
+        .menu-toggle {
+            display: flex !important;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 12px;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-toggle.hidden {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        .menu-toggle.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Menu lateral com SCROLL automático */
+        .menu {
+            display: none;
+            list-style-type: none;
+            flex-direction: column;
+            width: 300px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding: 80px 20px 20px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .menu.active {
+            display: flex;
+        }
+
+        .menu li {
+            margin: 8px 0;
+            min-height: 45px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu a:hover {
+            background-color: #555;
+            transform: translateX(5px);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        main {
+            padding: 40px 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+            min-height: 150vh;
+        }
+
+        .menu.active + main {
+            margin-left: 300px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .content-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #333;
+        }
+
+        /* Área para adicionar novos itens DINAMICAMENTE */
+        .add-item-section {
+            background: #e3f2fd !important;
+            border-left: 4px solid #2196f3 !important;
+        }
+
+        .add-item-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-item-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-item-form button {
+            padding: 10px 20px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-item-form button:hover {
+            background: #1976d2;
+        }
+
+        .auto-update-notice {
+            background: #e8f5e8 !important;
+            border-left: 4px solid #4caf50 !important;
+            margin-top: 20px;
+        }
+
+        /* Contador de itens no menu */
+        .menu-counter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav>
+        <div class="menu-toggle visible" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <ul class="menu" id="main-menu">
+            <!-- ITENS DO MENU - ATUALIZAM AUTOMATICAMENTE -->
+            <li><a href="index.html">Início</a></li>
+            <li><a href="fake.news.html">Fake News</a></li>
+            <li><a href="Resumo.de.acessos.html">Resumo de acessos</a></li>
+            <li><a href="Educação.Física.html">Educação Física</a></li>
+            <li><a href="Ciencias.html">Ciencias</a></li>
+            <li><a href="Matemática.quiz.html">Matemática quiz</a></li>
+            <li><a href="História.html">História</a></li>
+            <li><a href="Arte.html">Arte</a></li>
+            <li><a href="Setembro.Amarelo.html">Setembro Amarelo</a></li>
+            <li><a href="Língua.portuguesa.html">Língua portuguesa</a></li>
+            <li><a href="Informática.html">Informática</a></li>
+            <li><a href="Política.de.privacidade.html">Política de privacidade</a></li>
+            <li><a href="Portal.netescola.html">Portal netescola</a></li>
+        </ul>
+    </nav>
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainMenu = document.getElementById('main-menu');
+        const overlay = document.getElementById('overlay');
+        let lastScrollTop = 0;
+
+        // Atualizar contador de itens
+        function updateItemCount() {
+            const itemCount = mainMenu.querySelectorAll('li').length;
+            document.getElementById('itemCount').textContent = itemCount;
+        }
+
+        // Adicionar novo item ao menu
+        function addNewMenuItem() {
+            const textInput = document.getElementById('newItemText');
+            const linkInput = document.getElementById('newItemLink');
+            
+            const text = textInput.value.trim();
+            const link = linkInput.value.trim() || '#';
+            
+            if (text) {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${link}">${text}</a>`;
+                mainMenu.appendChild(newItem);
+                
+                // Limpar inputs
+                textInput.value = '';
+                linkInput.value = '';
+                
+                // Atualizar contador
+                updateItemCount();
+                
+                // Feedback visual
+                alert(`✅ "${text}" adicionado ao menu!`);
+            } else {
+                alert('⚠️ Digite o nome do item!');
+            }
+        }
+
+        // Adicionar itens de exemplo
+        function addSampleItems() {
+            const sampleItems = [
+                { text: 'Promoções', link: 'promocoes.html' },
+                { text: 'Novidades', link: 'novidades.html' },
+                { text: 'Downloads', link: 'downloads.html' },
+                { text: 'Suporte', link: 'suporte.html' },
+                { text: 'FAQ', link: 'faq.html' }
+            ];
+            
+            sampleItems.forEach(item => {
+                const newItem = document.createElement('li');
+                newItem.innerHTML = `<a href="${item.link}">${item.text}</a>`;
+                mainMenu.appendChild(newItem);
+            });
+            
+            updateItemCount();
+            alert('✅ 5 itens de exemplo adicionados!');
+        }
+
+        // Scroll inteligente do hambúrguer
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                mobileMenu.classList.remove('visible');
+                mobileMenu.classList.add('hidden');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('visible');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Abrir/fechar menu
+        mobileMenu.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            const spans = mobileMenu.querySelectorAll('span');
+            if (mainMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Fechar menu
+        overlay.addEventListener('click', closeMenu);
+        
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        function closeMenu() {
+            mainMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            resetHamburgerAnimation();
+        }
+
+        function resetHamburgerAnimation() {
+            const spans = mobileMenu.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+
+        // Inicializar contador
+        updateItemCount();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romero Britto - Galeria de Obras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: #6a11cb;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: #2575fc;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+        
+        .intro {
+            font-size: 1.2rem;
+            font-weight: 500;
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #6a11cb;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .process-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .process-item {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 20px;
+            border-radius: 8px;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .britto-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid #6a11cb;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .artwork {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .artwork:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .artwork img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .artwork-info {
+            padding: 15px;
+        }
+        
+        .artwork-title {
+            font-weight: bold;
+            color: #6a11cb;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .artwork-desc {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .process-list, .britto-features, .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Romero Britto: A Alegria da Arte Pop</h1>
+        <p>Explorando a criatividade, processos artísticos e a obra do artista</p>
+    </header>
+    
+    <div class="section">
+        <p class="intro">Romero Britto é um artista contemporâneo brasileiro de projeção internacional cuja obra exemplifica perfeitamente a poderosa sinergia entre as artes visuais e um processo criativo singular e reconhecível.</p>
+        
+        <p>Sua arte, descrita como "pop art neo-cubista", é um estudo de caso sobre como um processo artístico bem definido pode se tornar uma marca identitária global. Britto desenvolveu um estilo único que combina elementos cubistas com padrões decorativos e cores vibrantes, criando um universo visual otimista e cheio de energia.</p>
+    </div>
+    
+    <div class="section">
+        <h2>Galeria de Obras de Romero Britto</h2>
+        <p>Explore as obras mais famosas de Romero Britto, caracterizadas por suas cores vibrantes, padrões ousados e temas alegres que celebram a vida e a esperança.</p>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Todas as Obras</button>
+            <button class="filter-btn" data-filter="animal">Animais</button>
+            <button class="filter-btn" data-filter="people">Pessoas</button>
+            <button class="filter-btn" data-filter="object">Objetos</button>
+        </div>
+        
+        <div class="gallery">
+            <div class="artwork" data-category="people">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/0d4dbd0821cd3a09a8320a3d6ef55b5f.jpg?updatedAt=1757878452586?updatedAt=1757876342808?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Casal Feliz">
+                <div class="artwork-info">
+                    <div class="artwork-title">Casal Feliz</div>
+                    <div class="artwork-desc">Representação vibrante de amor e felicidade com cores intensas e padrões geométricos.</div>
+                </div>
+            </div>
+            
+            <div class="artwork" data-category="animal">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/a1cb5162a5c07a6d75f329dce4415ca9.jpg?updatedAt=1757879812184?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Gato Estilizado">
+                <div class="artwork-info">
+                    <div class="artwork-title">Gato Estilizado</div>
+                    <div class="artwork-desc">Representação lúdica de um gato com padrões abstratos e cores contrastantes.</div>
+                </div>
+            </div>
+            
+            <div class="artwork" data-category="object">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/7b9a34caa643692ce2ccdee881e616eb.jpg?updatedAt=1757879822103?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Vaso de Flores">
+                <div class="artwork-info">
+                    <div class="artwork-title">Vaso de Flores</div>
+                    <div class="artwork-desc">Natureza morta reinventada com padrões vibrantes và composição cubista.</div>
+                </div>
+            </div>
+            
+            <div class="artwork" data-category="people">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/429c7dd94c8a3afc49fc66b76c8f342c.jpg?updatedAt=1757879830428?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Retrato Feminino">
+                <div class="artwork-info">
+                    <div class="artwork-title">Retrato Feminino</div>
+                    <div class="artwork-desc">Mulher representada com traços cubistas e cores que transmitem alegria.</div>
+                </div>
+            </div>
+            
+            <div class="artwork" data-category="animal">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/c72a1ffc826c900424c79961dcbdbc66.jpg?updatedAt=1757879838393?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Leão Corajoso">
+                <div class="artwork-info">
+                    <div class="artwork-title">Leão Corajoso</div>
+                    <div class="artwork-desc">O rei da selva representado com padrões ousados e cores quentes.</div>
+                </div>
+            </div>
+            
+            <div class="artwork" data-category="object">
+                <img src="https://ik.imagekit.io/ssw2gbbpr/bd8cde5ccd82b875c08919f6a9279111.jpg?updatedAt=1757879803237?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Obra: Guitarra Colorida">
+                <div class="artwork-info">
+                    <div class="artwork-title">Guitarra Colorida</div>
+                    <div class="artwork-desc">Instrumento musical transformado em arte pop com padrões ritmados.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>O Processo Criativo de Britto</h2>
+        
+        <p>O processo de Britto é altamente metódico e replicável, o que permitiu que sua arte transcendesse as galerias tradicionais e se integrasse ao design de produtos, à moda, à arquitetura e à publicidade.</p>
+        
+        <div class="britto-features">
+            <div class="feature">
+                <h3>Paleta Vibrante</h3>
+                <p>Britto prioriza cores intensas, saturadas e alegres. Seu processo começa com a escolha de uma combinação de cores que evoque positividade e energia.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Padrões e Texturas Lúdicas</h3>
+                <p>Um elemento central de seu processo é o preenchimento de espaços com padrões geométricos, listras, bolhas e florais. Esses padrões, muitas vezes aplicados sobre formas sólidas, criam uma textura visual rica e ritmada.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Linhas Negras Espessas</h3>
+                <p>Herdando uma lição do cubismo e da vitralaria, Britto delineia suas formas com linhas negras e grossas. Este passo em seu processo é fundamental para dar estrutura, contraste e clareza às suas composições.</p>
+            </div>
+            
+            <div class="feature">
+                <h3>Temática Universal da Alegria</h3>
+                <p>O processo conceitual de Britto é focado em transmitir otimismo, esperança e felicidade. Ele eleva temas simples do cotidiano a ícones de alegria através de sua estética única.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 - Romero Britto: Galeria de Obras</p>
+        <p>Site educativo sobre o artista e suas técnicas</p>
+    </footer>
+
+    <script>
+        // Filtro para a galeria
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const artworks = document.querySelectorAll('.artwork');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove a classe active de todos os botões
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Adiciona a classe active ao botão clicado
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    artworks.forEach(artwork => {
+                        if (filter === 'all' || artwork.getAttribute('data-category') === filter) {
+                            artwork.style.display = 'block';
+                        } else {
+                            artwork.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+<div style="height: 30px;"></div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arte Contemporânea e Estética</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: #2575fc;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: #6a11cb;
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        .main-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .highlight {
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-left: 4px solid #2575fc;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #666;
+            text-align: center;
+            margin: 25px 0;
+            padding: 0 20px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 12px;
+            position: relative;
+        }
+        
+        .aesthetic-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .aesthetic-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .aesthetic-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .aesthetic-card h4 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Arte Contemporânea e Estética</h1>
+        <p>Explorando a produção artística da segunda metade do século XX até os dias atuais</p>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <section>
+                <h2>Arte Contemporânea</h2>
+                <p>A arte contemporânea é a produção artística feita a partir da segunda metade do século XX até os dias atuais. Ela não é definida por um único estilo, mas por uma atitude: a de questionar, refletir e, muitas vezes, desafiar as noções tradicionais do que é a arte, o seu propósito e o seu público.</p>
+                <p>Diferente de movimentos anteriores, que frequentemente partilhavam uma estética ou ideologia comum, a arte contemporânea é plural, multifacetada e profundamente influenciada pelo contexto globalizado, digital e político em que vivemos.</p>
+            </section>
+            
+            <section>
+                <h2>Arte e o Olhar Pessoal</h2>
+                <p>A experiência com a arte nunca é totalmente objetiva. O olhar pessoal é o filtro único através do qual cada indivíduo interpreta uma obra. Esse filtro é composto pela nossa bagagem cultural, histórias de vida, emoções, conhecimentos prévios e até mesmo pelo nosso humor no momento do encontro com a obra.</p>
+                <p>O que uma pessoa vê como profundo, outra pode achar confuso; o que para alguns é belo, para outros pode ser perturbador. A arte, portanto, existe plenamente na intersecção entre a intenção do artista e a recepção do espectador, tornando cada experiência singular e válida.</p>
+            </section>
+            
+            <section>
+                <h2>O Que É Estética?</h2>
+                <p>A Estética, na filosofia, é o campo que estuda a natureza do belo, da arte e do gosto. Ela busca compreender não apenas o que torna algo bonito ou feio, mas também como percebemos, sentimos e julgamos as experiências sensoriais e artísticas.</p>
+                <p>Vai além da simples aparência, investigando os fundamentos da percepção sensorial e os critérios que usamos para fazer julgamentos artísticos. Em termos mais simples, a estética pergunta: "Por que consideramos isso belo?" e "Como essa obra nos afeta?".</p>
+            </section>
+            
+            <section>
+                <h2>Elementos que Influenciam a Estética</h2>
+                <p>A percepção estética de uma obra ou objeto não surge do vácuo. Ela é influenciada por uma complexa rede de fatores:</p>
+                <ul>
+                    <li><strong>Contexto Histórico e Cultural:</strong> A época e o local onde uma obra é criada determinam seus materiais, temas e valores de beleza.</li>
+                    <li><strong>Intenção do Artista:</strong> A mensagem, emoção ou conceito que o criador deseja expressar.</li>
+                    <li><strong>Técnica e Material:</strong> A habilidade de execução e a escolha dos materiais (tinta, argila, luz digital, lixo reciclado) geram diferentes impactos visuais e táteis.</li>
+                    <li><strong>Elementos Formais:</strong> Cor, linha, forma, textura, composição, equilíbrio e contraste são a gramática básica da linguagem visual.</li>
+                    <li><strong>Contexto de Exibição:</strong> Uma pintura em um museu renascentista é vista de maneira diferente da mesma pintura em uma estação de metrô.</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Tipos de Estéticas das Artes</h2>
+                <p>Ao longo da história, diferentes movimentos artísticos consolidaram estéticas particulares, cada uma com seus próprios ideais e características:</p>
+                
+                <div class="aesthetic-types">
+                    <div class="aesthetic-card">
+                        <h4>Clássica</h4>
+                        <p>Originária da Grécia e Roma Antigas e revitalizada no Renascimento, valoriza o equilíbrio, a proporção, a harmonia e a idealização da forma humana. O foco está na perfeição técnica e na representação da beleza ideal.</p>
+                    </div>
+                    
+                    <div class="aesthetic-card">
+                        <h4>Romântica</h4>
+                        <p>Surgida no final do século XVIII como reação ao racionalismo clássico, privilegia a emoção, a dramaticidade, o indivíduo e o poder sublime da natureza. As cenas são turbulentas, as cores são intensas e o sentimento prevalece sobre a razão.</p>
+                    </div>
+                    
+                    <div class="aesthetic-card">
+                        <h4>Realista</h4>
+                        <p>Emergindo em meados do século XIX, busca representar a realidade de forma objetiva e factual, sem idealizações. Foca em cenas do cotidiano, no trabalho e nas classes sociais menos privilegiadas, recusando os temas heroicos e dramáticos do Romantismo.</p>
+                    </div>
+                    
+                    <div class="aesthetic-card">
+                        <h4>Moderna</h4>
+                        <p>Um termo amplo para as vanguardas do final do século XIX e início do XX (como Impressionismo, Cubismo, Expressionismo). Estas correntes rompem radicalmente com o passado, explorando a subjetividade, a abstração, novas perspectivas e a própria natureza da arte.</p>
+                    </div>
+                    
+                    <div class="aesthetic-card">
+                        <h4>Contemporânea</h4>
+                        <p>Como mencionado, é marcada pela pluralidade e pela desmaterialização do objeto artístico. Frequentemente é conceitual, interativa e questionadora. Sua estética pode ser deliberadamente "não estética" (anti-belista) para servir a uma ideia específica.</p>
+                    </div>
+                    
+                    <div class="aesthetic-card">
+                        <h4>Instalações e Performances</h4>
+                        <p>Essas linguagens definem sua própria estética. Instalações criam ambientes imersivos onde o espectador é convidado a entrar e experienciar a obra com todos os sentidos. Performances usam o corpo do artista como suporte e meio, focando na ação efêmera e no momento presente.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="sidebar">
+            <section>
+                <h3>Estéticas no Dia a Dia</h3>
+                <p>A estética não está confinada aos museus. Ela permeia cada aspecto de nossas vidas, influenciando nossas escolhas e percepções:</p>
+                <ul>
+                    <li><strong>Moda:</strong> As roupas que vestimos comunicam nossa identidade e seguem (ou contestam) tendências estéticas.</li>
+                    <li><strong>Design de Produtos:</strong> A forma de um celular, a curva de uma cadeira ou a interface de um aplicativo são cuidadosamente projetadas para serem funcionais e visualmente agradáveis.</li>
+                    <li><strong>Gastronomia:</strong> A apresentação de um prato em um restaurante é uma composição estética de cores, texturas e arranjos.</li>
+                    <li><strong>Decoração:</strong> A maneira como organizamos nossa casa reflete nosso gosto pessoal e cria uma atmosfera específica.</li>
+                    <li><strong>Redes Sociais:</strong> Os filtros do Instagram, a curadoria de um feed e a edição de vídeos no TikTok são todos atos de criação e aplicação de estéticas digitais.</li>
+                </ul>
+            </section>
+            
+            <div class="highlight">
+                <h3>Por Que Estudar Estética?</h3>
+                <p>Estudar estética é fundamental por várias razões:</p>
+                <ul>
+                    <li><strong>Desenvolve o Pensamento Crítico:</strong> Nos capacita a analisar e interpretar imagens e mensagens de forma mais profunda, indo além do "gosto pessoal".</li>
+                    <li><strong>Amplia o Repertório Cultural:</strong> Conhecer diferentes movimentos e estéticas nos ajuda a entender a história, a filosofia e a sociedade de cada época.</li>
+                    <li><strong>Melhora a Comunicação Visual:</strong> Em um mundo dominado por imagens, entender os princípios estéticos é crucial para criar e consumir conteúdo de forma mais consciente e eficaz.</li>
+                    <li><strong>Enriquece a Experiência de Vida:</strong> Nos torna mais sensíveis e atentos à beleza e à criatividade presentes no mundo ao nosso redor, da arquitetura de uma cidade a um pôr-do-sol.</li>
+                    <li><strong>Compreende a Contemporaneidade:</strong> Ajuda a decifrar as complexas e muitas vezes desafiadoras obras de arte contemporânea, conectando-nos com os debates e questões do nosso tempo.</li>
+                </ul>
+            </div>
+            
+            <p class="quote">"A estética é a chave para desvendar não apenas a arte, mas também a forma como nos relacionamos com o mundo visual e sensorial que nos cerca."</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 - Página educativa sobre Arte Contemporânea e Estética</p>
+    </footer>
+</body>
+</html>
